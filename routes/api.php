@@ -14,6 +14,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post("login", [App\Http\Controllers\Auth\LoginController::class, 'login']);
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get("logout", [App\Http\Controllers\Auth\LoginController::class, 'logout']);
+
+    // USER ACCOUNTS
+    Route::apiResource("users", App\Http\Controllers\API\UserController::class)
+        ->parameters([
+            'users' => 'id'
+        ])
+        ->missing(function (Request $request) {
+            return  response()->json(["message" => "Account not found"], 404);
+        });
+
+    // ROLES
+    Route::apiResource("userroles", App\Http\Controllers\API\RoleController::class)
+        ->parameters([
+            'userroles' => 'id'
+        ])
+        ->missing(function (Request $request) {
+            return  response()->json(["message" => "Account not found"], 404);
+        });
 });
