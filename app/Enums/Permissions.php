@@ -3,7 +3,7 @@
 namespace App\Enums;
 
 
-enum PermissionTypes: string
+enum Permissions: string
 {
     case SHOW_USER = "show user";
     case CREATE_USER = "create user";

@@ -8,6 +8,7 @@ use App\Http\Controllers\API\BaseCrudController;
 use Illuminate\Http\Request;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends BaseCrudController
 {
@@ -15,10 +16,16 @@ class UserController extends BaseCrudController
     public function __construct()
     {
         $this->model = new User;
-        $this->modelQuery = $this->model->select("username", "full_name", "email");
+        $this->modelQuery = User::select("id", "username", "full_name", "email")->with("roles");
+        // $this->modelQuery = User::select("username", "full_name", "email")->with(['roles' => function ($query) {
+        // $query->select('id', 'name');
+        // }]);
 
+        // $this->model->select("username", "full_name", "email")
         $this->searchFields = ["username", "full_name"];
         $this->columnOrder = "updated_at";
+
+        // https://stackoverflow.com/questions/32727060/select-specific-columns-from-eloquent-relations
     }
 
     public function store(Request $request)
@@ -35,4 +42,27 @@ class UserController extends BaseCrudController
 
         return response(["message" => "Data inserted", "data" => $user], 201);
     }
+
+    public function syncRoles(Request $request, $id)
+    {
+        $roles = $request->validate([
+            "roles" => 'required|array',
+            'roles.*' => 'integer',
+        ]);
+
+
+        User::find($id)->syncRoles($roles);
+
+        return response()->json(["message" => "Successfully synced roles"]);
+    }
+
+    public function show($id)
+    {
+        $user = $this->modelQuery->find($id);
+        return $user->getPermissionsViaRoles();
+    }
+
+    // public function getRoles(Request $request, $id)
+    // {
+    // }
 }

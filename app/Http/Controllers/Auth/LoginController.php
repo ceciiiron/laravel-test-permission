@@ -20,7 +20,7 @@ class LoginController extends Controller
         ]);
 
         if (Auth::user()) {
-            return response()->json(["message" => "You are currently logged in"], 200);
+            return response()->json(["message" => "You are currently logged in", "user" => Auth::user()->testing], 200);
         }
 
         if (Auth::attempt($credentials)) {

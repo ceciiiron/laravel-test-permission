@@ -7,8 +7,10 @@ use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-use App\Enums\PermissionTypes;
+use App\Enums\Permissions;
 use App\Models\User;
+
+use Illuminate\Support\Facades\Log;
 
 class RolePermissionSeeder extends Seeder
 {
@@ -17,43 +19,43 @@ class RolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
+
         $accountManagerRole = Role::create(["name" => "account-manager"]);
         $hospitalClerkRole = Role::create(["name" => "hospital-clerk"]);
         $doctorRole = Role::create(["name" => "doctor"]);
 
-        foreach (PermissionTypes::cases() as $permission) {
+        foreach (Permissions::cases() as $permission) {
             Permission::create(["name" => $permission->value]);
         }
 
-        $accountManagerRole->givePermissionTo([1, 2, 3, 4, 5]);
 
         $accountManagerRole->givePermissionTo([
-            PermissionTypes::SHOW_USER,
-            PermissionTypes::CREATE_USER,
-            PermissionTypes::UPDATE_USER,
-            PermissionTypes::DELETE_USER,
-            PermissionTypes::VIEW_USERS,
+            Permissions::SHOW_USER->value,
+            Permissions::CREATE_USER->value,
+            Permissions::UPDATE_USER->value,
+            Permissions::DELETE_USER->value,
+            Permissions::VIEW_USERS->value,
         ]);
 
         $hospitalClerkRole->givePermissionTo([
-            PermissionTypes::SHOW_PATIENT,
-            PermissionTypes::CREATE_PATIENT,
-            PermissionTypes::UPDATE_PATIENT,
-            PermissionTypes::DELETE_PATIENT,
-            PermissionTypes::VIEW_PATIENTS,
+            Permissions::SHOW_PATIENT->value,
+            Permissions::CREATE_PATIENT->value,
+            Permissions::UPDATE_PATIENT->value,
+            Permissions::DELETE_PATIENT->value,
+            Permissions::VIEW_PATIENTS->value,
         ]);
 
         $doctorRole->givePermissionTo([
-            PermissionTypes::SHOW_PRESCRIPTION,
-            PermissionTypes::CREATE_PRESCRIPTION,
-            PermissionTypes::UPDATE_PRESCRIPTION,
-            PermissionTypes::DELETE_PRESCRIPTION,
-            PermissionTypes::VIEW_PRESCRIPTIONS,
-            PermissionTypes::SHOW_PATIENT,
-            PermissionTypes::CREATE_PATIENT,
-            PermissionTypes::UPDATE_PATIENT,
-            PermissionTypes::DELETE_PATIENT,
-            PermissionTypes::VIEW_PATIENTS,
+            Permissions::SHOW_PRESCRIPTION->value,
+            Permissions::CREATE_PRESCRIPTION->value,
+            Permissions::UPDATE_PRESCRIPTION->value,
+            Permissions::DELETE_PRESCRIPTION->value,
+            Permissions::VIEW_PRESCRIPTIONS->value,
+            Permissions::SHOW_PATIENT->value,
+            Permissions::CREATE_PATIENT->value,
+            Permissions::UPDATE_PATIENT->value,
+            Permissions::DELETE_PATIENT->value,
+            Permissions::VIEW_PATIENTS->value,
         ]);
     }
 }
