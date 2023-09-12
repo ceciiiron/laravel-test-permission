@@ -19,6 +19,8 @@ class RoleController extends BaseCrudController
     public function __construct()
     {
         $this->model = new Role;
+
+        // $this->middleware('can:show roles')->only('index', 'show');
         // $this->modelQuery = $this->model->select("username", "full_name", "email");
 
         // $this->searchFields = ["username", "full_name"];
@@ -46,7 +48,7 @@ class RoleController extends BaseCrudController
 
         $permissions = $request->validate([
             "permissions" => 'required|array',
-            "permissions.*" => "integer"
+            "permissions.*" => "required"
         ]);
 
         Role::find($id)->syncPermissions($permissions);

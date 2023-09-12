@@ -25,6 +25,8 @@ class UserController extends BaseCrudController
         $this->searchFields = ["username", "full_name"];
         $this->columnOrder = "updated_at";
 
+        $this->middleware('can:show roles')->only('index', 'show');
+
         // https://stackoverflow.com/questions/32727060/select-specific-columns-from-eloquent-relations
     }
 
@@ -47,7 +49,7 @@ class UserController extends BaseCrudController
     {
         $roles = $request->validate([
             "roles" => 'required|array',
-            'roles.*' => 'integer',
+            'roles.*' => 'required',
         ]);
 
 
